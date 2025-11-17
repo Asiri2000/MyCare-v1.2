@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+}
+
+.sidebar h4 {
+    color: #ffffff;
+}
+
+.sidebar .nav-link {
+    color: #000000;
+    padding: 10px 20px;
+    background-color: #ffffff;
+}
+
+.sidebar .nav-link.active {
+    font-weight: bold;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: #001f3f;
+}
+
+.content {
+    margin-left: 16.6667%; /* 2/12 of the grid system, considering the sidebar width */
+    padding: 20px;
+}
+
+.navbar {
+    background-color: #001f3f;
+}
+
+.navbar-text, .bi-bell, .bi-arrow-right-circle {
+    color: #ffffff;
+}
+
+.navbar-text {
+    margin-right: 20px;
+}
+
+.bi-bell, .bi-arrow-right-circle {
+    font-size: 1.5rem;
+}
+
+.bg-navy {
+    background-color: #001f3f;
+}
+
+footer {
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+footer a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+footer a:hover {
+    color: #001f3f;
+    text-decoration: underline;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    margin-bottom: 0;
+}

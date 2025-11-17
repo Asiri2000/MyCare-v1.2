@@ -1,0 +1,167 @@
+<?php
+session_start();
+
+// Database connection parameters
+$host = 'localhost';
+$dbname = 'mycare';
+$dbuser = 'root';
+$dbpw = '';
+$dsn = "mysql:host=$host;dbname=$dbname";
+$pdo = new PDO($dsn, $dbuser, $dbpw);
+
+
+// Retrieve user information
+$username = $_SESSION['username'];
+$query = "SELECT * FROM patient WHERE username = :username";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':username', $username);
+$stmt->execute();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Health Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/9f2f1fcf1c.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem 0;
+        }
+        .logoimg {
+            max-height: 50px;
+        }
+        .nav-link {
+            color: white;
+            padding: 0.5rem 1rem;
+        }
+        .nav-link:hover {
+            background-color: #495057;
+        }
+        .auth-links a {
+            color: white;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        .dashboard-container {
+            margin-top: 2rem;
+        }
+        .card {
+            margin-bottom: 1rem;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="container-fluid header">
+        <div class="row align-items-center">
+            <div class="col-3 d-md-none text-start">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+                <img src="logo2.png" alt="Logo" class="logoimg">
+            </div>
+            <nav class="col-12 col-md-6 d-none d-md-block">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Doc Chat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Appointments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Reminders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Health Guidance</a></li>
+                </ul>
+            </nav>
+            <div class="col-12 col-md-3 d-none d-md-block text-end auth-links">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a> | <a href="#" data-bs-toggle="modal" data-bs-target="#registrationModal">Sign Up</a>
+            </div>
+        </div>
+    </header>
+    <nav class="collapse" id="navbarNav">
+        <ul class="nav flex-column text-center">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Doc Chat</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Appointments</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Reminders</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Health Guidance</a></li>
+        </ul>
+    </nav>
+
+    <div class="container dashboard-container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">User Information</div>
+                    <div class="card-body">
+                        <p><strong>Name:</strong> <?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></p>
+                        <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone_number']); ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">Appointments</div>
+                    <div class="card-body">
+                        <?php if (count($appointments) > 0): ?>
+                            <ul>
+                                <?php foreach ($appointments as $appointment): ?>
+                                    <li>
+                                        <?php echo htmlspecialchars($appointment['appointment_date']) . ' - ' . htmlspecialchars($appointment['description']); ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p>No upcoming appointments.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Reminders</div>
+                    <div class="card-body">
+                        <?php if (count($reminders) > 0): ?>
+                            <ul>
+                                <?php foreach ($reminders as $reminder): ?>
+                                    <li>
+                                        <?php echo htmlspecialchars($reminder['reminder_date']) . ' - ' . htmlspecialchars($reminder['description']); ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p>No reminders set.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid footer text-center py-3 mt-5">
+        <p>&copy; 2023 Health Management. All rights reserved.</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#" class="text-white">2024 | </a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">MyCare | </a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">About Us | </a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">Contact Us</a></li>
+        </ul>
+    </footer>
+    <script src="index.js"></script>
+</body>
+</html>
