@@ -1,0 +1,2 @@
+# MyCare
+MyCare is a web-based healthcare platform designed to simplify patient–doctor interactions. The system allows patients to book appointments, view their medical details, chat with doctors, receive appointment reminders, and upload reports or photos for consultation. Built using HTML, CSS, Bootstrap for the front-end, and PHP with MySQL for the backend, MyCare delivers a clean user interface with smooth functionality. The platform focuses on improving accessibility, efficiency, and communication within the healthcare process.
